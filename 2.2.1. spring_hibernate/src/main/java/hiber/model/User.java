@@ -1,10 +1,16 @@
 package hiber.model;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 
+@NamedQueries({
+        @NamedQuery(name = "User.SearchByCar"
+        ,query = "from User where car.model =:x and car.series =:y")
+})
 @Entity
 @Table(name = "users")
-public class User {
+public class User  {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +24,27 @@ public class User {
 
    @Column(name = "email")
    private String email;
+   @OneToOne
+   private Car car;
+
+   public Car getCar() {
+      return car;
+   }
+
+   @Override
+   public String toString() {
+      return "\nUser{" +
+              "id=" + id +
+              ", firstName='" + firstName + '\'' +
+              ", lastName='" + lastName + '\'' +
+              ", email='" + email + '\'' +
+              ", car=" + car +
+              '}';
+   }
+
+   public void setCar(Car car) {
+      this.car = car;
+   }
 
    public User() {}
    
@@ -25,6 +52,13 @@ public class User {
       this.firstName = firstName;
       this.lastName = lastName;
       this.email = email;
+   }
+
+   public User(String firstName, String lastName, String email, Car car) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.email = email;
+      this.car = car;
    }
 
    public Long getId() {
