@@ -1,7 +1,5 @@
 package hiber.model;
 
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 
 @NamedQueries({
@@ -13,7 +11,6 @@ import javax.persistence.*;
 public class User  {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "name")
@@ -24,7 +21,10 @@ public class User  {
 
    @Column(name = "email")
    private String email;
-   @OneToOne
+
+   @OneToOne(fetch = FetchType.LAZY)
+   @MapsId
+   @JoinColumn(name = "id")
    private Car car;
 
    public Car getCar() {
@@ -52,17 +52,19 @@ public class User  {
       this.firstName = firstName;
       this.lastName = lastName;
       this.email = email;
+      this.car = null;
    }
 
-   public User(String firstName, String lastName, String email, Car car) {
+   public User( String firstName, String lastName, String email, Car car) {
       this.firstName = firstName;
       this.lastName = lastName;
       this.email = email;
       this.car = car;
+      this.id = id;
    }
 
-   public Long getId() {
-      return id;
+   public int getId() {
+      return Math.toIntExact(id);
    }
 
    public void setId(Long id) {

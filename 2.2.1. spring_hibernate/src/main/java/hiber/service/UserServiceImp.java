@@ -16,11 +16,12 @@ import java.util.List;
 @Service
 public class UserServiceImp implements UserService {
 
-   private EntityManager entityManager;
-   @Autowired
    private UserDao userDao;
    @Autowired
-   private SessionFactory sessionFactory;
+   public UserServiceImp(UserDao userDao) {
+      this.userDao = userDao;
+   }
+
    @Transactional
    @Override
    public void add(User user) {
@@ -33,7 +34,7 @@ public class UserServiceImp implements UserService {
       return userDao.listUsers();
    }
    public List<User> getListUserFromCar(String model,int series){
-      return sessionFactory.createEntityManager().createNamedQuery("User.SearchByCar").setParameter("x",model).setParameter("y",series).getResultList();
+      return userDao.getListUserFromCar(model,series);
    }
 
 }
